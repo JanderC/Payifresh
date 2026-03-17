@@ -208,7 +208,7 @@ const Navbar = ({ onToggleMobile, onToggleCollapse, collapsed }) => {
               boxShadow: '0 2px 12px rgba(255,204,0,0.2)'
             }}>
               <img
-                src="/payifresh.png"
+                src="https://www.pangeatech.com.uy:5334/gestor-documental-dev/EMP-CB4313/servicio/static/original/payifresh-FILE-44C2B9CA.png"
                 alt="PAYIFRESH"
                 style={{ height: 26, width: 'auto' }}
               />
