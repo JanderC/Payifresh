@@ -657,7 +657,7 @@ const ListaVentasScreen = () => {
             </div>
           ) : ventas.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">🍦</div>
+              <div className="empty-icon">☕</div>
               <div className="empty-title">No hay ventas{filtroActivo ? ` con estado "${filtroActivo}"` : ""}</div>
               <div className="empty-sub">{filtroActivo ? "Prueba con otro filtro" : "Las ventas aparecerán aquí"}</div>
             </div>
