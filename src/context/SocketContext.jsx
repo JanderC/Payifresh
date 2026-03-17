@@ -26,7 +26,7 @@ export const SocketProvider = ({ children }) => {
     }
 
     // Crear conexión de socket
-    const newSocket = io('http://localhost:5000/', {
+    const newSocket = io('https://payifreshbackend-production.up.railway.app/', {
       auth: {
         token: token
       },
