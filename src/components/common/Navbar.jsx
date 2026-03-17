@@ -1,0 +1,269 @@
+import { Navbar as BSNavbar, Container, Nav, Dropdown } from 'react-bootstrap';
+import { useAuth } from '../../hooks/useAuth';
+import { useSocket } from '../../context/SocketContext';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import ChangePasswordModal from './ChangePasswordModal';
+
+const Navbar = ({ onToggleMobile, onToggleCollapse, collapsed }) => {
+  const { user, logout } = useAuth();
+  const { connected } = useSocket();
+  const navigate = useNavigate();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  return (
+    <>
+      <style>{`
+        .navbar-custom {
+          background: #1a1a1a !important;
+          border-bottom: 2px solid #FFCC00 !important;
+          box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+          height: 60px !important;
+          min-height: 60px !important;
+          max-height: 60px !important;
+          z-index: 1030;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+        .navbar-custom > .container-fluid {
+          height: 60px;
+          flex-wrap: nowrap !important;
+          align-items: center;
+        }
+
+        .navbar-brand-text {
+          font-family: 'Arial Black', 'Franklin Gothic Heavy', sans-serif;
+          font-weight: 900;
+          font-size: 1.2rem;
+          letter-spacing: -0.02em;
+          color: #fff !important;
+          white-space: nowrap;
+          text-transform: uppercase;
+        }
+        .navbar-brand-text span { color: #FFCC00; }
+
+        .sidebar-toggle-btn {
+          background: rgba(255,255,255,0.08) !important;
+          border: 1px solid rgba(255,255,255,0.15) !important;
+          border-radius: 10px;
+          width: 38px;
+          min-width: 38px;
+          height: 38px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          color: #fff;
+          padding: 0;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+        .sidebar-toggle-btn:hover {
+          background: rgba(255,204,0,0.15) !important;
+          border-color: rgba(255,204,0,0.4) !important;
+        }
+
+        .status-pill {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 5px 12px;
+          border-radius: 999px;
+          font-size: 0.75rem;
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 600;
+          border: 1px solid;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .status-pill.connected {
+          background: rgba(255,204,0,0.15);
+          border-color: rgba(255,204,0,0.4);
+          color: #FFCC00;
+        }
+        .status-pill.disconnected {
+          background: rgba(255,100,100,0.15);
+          border-color: rgba(255,100,100,0.3);
+          color: #fca5a5;
+        }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .status-dot.connected { background: #FFCC00; animation: pulse-dot 2s ease infinite; }
+        .status-dot.disconnected { background: #fca5a5; }
+        @keyframes pulse-dot {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .user-btn {
+          background: rgba(255,255,255,0.08) !important;
+          border: 1px solid rgba(255,255,255,0.15) !important;
+          border-radius: 12px !important;
+          padding: 5px 12px 5px 8px !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 10px;
+          transition: all 0.2s ease !important;
+          color: #fff !important;
+          flex-shrink: 0;
+        }
+        .user-btn:hover, .show > .user-btn {
+          background: rgba(255,204,0,0.15) !important;
+          border-color: rgba(255,204,0,0.4) !important;
+        }
+        .user-btn::after { display: none !important; }
+
+        .user-avatar {
+          width: 32px; height: 32px; border-radius: 9px;
+          background: linear-gradient(135deg, #FFCC00, #FFB800);
+          display: flex; align-items: center; justify-content: center;
+          font-family: 'Arial Black', sans-serif; font-weight: 900;
+          font-size: 0.85rem; color: #1a1a1a; flex-shrink: 0;
+          box-shadow: 0 3px 10px rgba(255,204,0,0.35);
+        }
+        .user-info-name {
+          font-family: 'DM Sans', sans-serif; font-weight: 600;
+          font-size: 0.82rem; color: #fff; line-height: 1.2;
+        }
+        .user-info-role {
+          font-family: 'DM Sans', sans-serif; font-size: 0.68rem;
+          color: rgba(255,204,0,0.85); line-height: 1.2;
+          text-transform: uppercase; letter-spacing: 0.05em;
+        }
+
+        .dd-menu {
+          background: #fff !important;
+          border: 1px solid rgba(255,204,0,0.25) !important;
+          border-radius: 14px !important;
+          box-shadow: 0 16px 48px rgba(0,0,0,0.18) !important;
+          padding: 8px !important;
+          min-width: 210px;
+          margin-top: 8px !important;
+          animation: dd-in 0.16s ease;
+        }
+        @keyframes dd-in {
+          from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .dd-header {
+          padding: 8px 12px 12px;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+          margin-bottom: 6px;
+        }
+        .dd-header .dd-name {
+          font-family: 'Arial Black', sans-serif; font-weight: 900;
+          font-size: 0.9rem; color: #1a1a1a;
+        }
+        .dd-header .dd-role {
+          font-size: 0.7rem; color: #cc9900;
+          text-transform: uppercase; letter-spacing: 0.06em;
+          font-weight: 700; font-family: 'DM Sans', sans-serif;
+        }
+        .dd-item {
+          font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500;
+          color: #1a1a1a !important; border-radius: 8px; padding: 9px 12px;
+          display: flex; align-items: center; gap: 10px; transition: all 0.15s ease;
+          background: transparent !important; border: none; width: 100%; cursor: pointer;
+          text-decoration: none !important;
+        }
+        .dd-item:hover { background: rgba(255,204,0,0.12) !important; color: #1a1a1a !important; }
+        .dd-item.danger { color: #dc2626 !important; }
+        .dd-item.danger:hover { background: rgba(239,68,68,0.07) !important; }
+        .dd-sep { border-color: rgba(0,0,0,0.08) !important; margin: 6px 0; }
+      `}</style>
+
+      <BSNavbar className="navbar-custom px-2 px-md-3" sticky="top">
+        <Container fluid style={{ flexWrap: 'nowrap', height: '60px', alignItems: 'center', gap: '10px' }}>
+
+          {/* Hamburger — solo móvil */}
+          <button className="sidebar-toggle-btn d-lg-none" onClick={onToggleMobile} title="Abrir menú">
+            <i className="bi bi-list" style={{ fontSize: '1.3rem' }}></i>
+          </button>
+
+          {/* Collapse toggle — solo desktop */}
+          <button
+            className="sidebar-toggle-btn d-none d-lg-flex"
+            onClick={onToggleCollapse}
+            title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+            style={{ opacity: collapsed ? 0.7 : 1 }}
+          >
+            <i
+              className="bi bi-layout-sidebar"
+              style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease', transform: collapsed ? 'scaleX(-1)' : 'scaleX(1)' }}
+            />
+          </button>
+
+          {/* Brand */}
+          <BSNavbar.Brand className="d-flex align-items-center gap-2 me-auto p-0" style={{ flexShrink: 1, minWidth: 0 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: 'rgba(255,255,255,0.1)',
+              border: '1.5px solid rgba(255,204,0,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow: '0 2px 12px rgba(255,204,0,0.2)'
+            }}>
+              <img
+                src="/payifresh.png"
+                alt="PAYIFRESH"
+                style={{ height: 26, width: 'auto' }}
+              />
+            </div>
+            <span className="navbar-brand-text d-none d-sm-block">
+              PAYI<span>FRESH</span>
+            </span>
+          </BSNavbar.Brand>
+
+          {/* Right side */}
+          <Nav style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', flexShrink: 0 }}>
+            <div className={`status-pill ${connected ? 'connected' : 'disconnected'} d-none d-sm-flex`}>
+              <div className={`status-dot ${connected ? 'connected' : 'disconnected'}`} />
+              <span className="d-none d-md-inline">{connected ? 'En línea' : 'Sin conexión'}</span>
+            </div>
+            <i
+              className={`bi ${connected ? 'bi-wifi' : 'bi-wifi-off'} d-sm-none`}
+              style={{ fontSize: '1.1rem', color: connected ? '#FFCC00' : '#fca5a5' }}
+            />
+
+            <Dropdown align="end">
+              <Dropdown.Toggle as="button" className="user-btn" id="dropdown-user">
+                <div className="user-avatar">
+                  {user?.nombre_completo?.charAt(0)?.toUpperCase() || 'U'}
+                </div>
+                <div className="d-none d-md-block text-start">
+                  <div className="user-info-name">{user?.nombre_completo}</div>
+                  <div className="user-info-role">{user?.rol}</div>
+                </div>
+                <i className="bi bi-chevron-down d-none d-md-block" style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)' }} />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="dd-menu border-0 shadow-none">
+                <div className="dd-header">
+                  <div className="dd-name">{user?.nombre_completo}</div>
+                  <div className="dd-role">{user?.rol}</div>
+                </div>
+                <button className="dd-item" onClick={() => setShowPasswordModal(true)}>
+                  <i className="bi bi-shield-lock" style={{ fontSize: '1rem', color: '#FFCC00' }} />
+                  Cambiar Contraseña
+                </button>
+                <hr className="dd-sep" />
+                <button className="dd-item danger" onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right" style={{ fontSize: '1rem' }} />
+                  Cerrar Sesión
+                </button>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Nav>
+        </Container>
+      </BSNavbar>
+
+      <ChangePasswordModal show={showPasswordModal} onHide={() => setShowPasswordModal(false)} />
+    </>
+  );
+};
+
+export default Navbar;

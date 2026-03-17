@@ -1,0 +1,203 @@
+/* DisplayScreen.css */
+.display-screen-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.display-header {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.display-title {
+  color: white;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 800;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.display-badge {
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Tarjetas de resumen */
+.display-resumen-card {
+  border-radius: 16px;
+  border-left: 6px solid;
+  transition: all 0.2s ease;
+  animation: slideIn 0.3s ease-out;
+  background: white;
+}
+.display-resumen-card.border-warning {
+  border-left-color: #ffc107;
+}
+.display-resumen-card.border-info {
+  border-left-color: #17a2b8;
+}
+.display-resumen-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+}
+
+.display-resumen-numero {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Modal de detalle */
+.display-detalle-items {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+.display-detalle-item {
+  border-left: 4px solid #667eea;
+}
+.display-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 3px solid #dee2e6;
+}
+.display-item-image-placeholder {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #e9ecef, #dee2e6);
+  border: 3px solid #dee2e6;
+}
+
+/* Secciones */
+.display-section-card {
+  border-radius: 20px;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-in;
+}
+.display-section-header {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  border: none;
+}
+.display-count-badge {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  border-radius: 15px;
+  min-width: 70px;
+  text-align: center;
+}
+.display-section-body {
+  background-color: #f8f9fa;
+}
+.display-section-body::-webkit-scrollbar {
+  width: 8px;
+}
+.display-section-body::-webkit-scrollbar-track {
+  background: #e9ecef;
+  border-radius: 10px;
+}
+.display-section-body::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+/* Estado vacío */
+.display-empty-state {
+  padding: 2rem 1rem;
+}
+.display-empty-icon {
+  font-size: clamp(3rem, 8vw, 5rem);
+  color: #dee2e6;
+}
+.display-empty-text {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: #6c757d;
+  font-weight: 600;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive para tablet y móvil */
+@media (max-width: 991px) {
+  .display-section-body {
+    max-height: 50vh !important;
+  }
+  .display-resumen-card .d-flex {
+    flex-wrap: wrap;
+  }
+  .display-resumen-numero {
+    font-size: 1.4rem;
+  }
+  .display-item-image,
+  .display-item-image-placeholder {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .display-header .d-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+  .display-resumen-card .d-flex {
+    gap: 0.5rem;
+  }
+  .display-resumen-card .btn {
+    padding: 0.5rem !important;
+  }
+  .display-resumen-card .btn i {
+    font-size: 1.2rem;
+  }
+  .display-section-header h2 {
+    font-size: 1.3rem;
+  }
+  .display-count-badge {
+    font-size: 1.2rem;
+    min-width: 60px;
+  }
+  .modal-footer .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Modo pantalla completa */
+@media (min-width: 1920px) {
+  .display-title {
+    font-size: 3rem;
+  }
+  .display-resumen-numero {
+    font-size: 2rem;
+  }
+  .display-item-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Pulsación para indicador de conexión */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.display-badge.bg-success {
+  animation: pulse 2s ease-in-out infinite;
+}
