@@ -92,10 +92,10 @@ const LoginScreen = () => {
                   {/* Logo PAYIFRESH */}
                   <div className="mb-3">
                     <img
-                      src="/payifresh.png"
+                      src="https://www.pangeatech.com.uy:5334/gestor-documental-dev/EMP-CB4313/servicio/static/original/payifresh-FILE-44C2B9CA.png"
                       alt="PAYIFRESH Logo"
-                      style={{
-                        maxWidth: '220px',
+                       style={{
+                        maxWidth: '280px',
                         width: '100%',
                         height: 'auto'
                       }}
